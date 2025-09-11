@@ -32,6 +32,7 @@ model Post {
   author    User       @relation(fields: [authorId], references: [id])
   authorId  Int
   comments Comments[]
+  categories PostCategory[]
 }
 
 
@@ -43,4 +44,20 @@ model Comments{
   createdAt DateTime @default(now())
   author User @relation(fields: [authorId], references: [id])
   authorId Int
+}
+
+model Category {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  description String?
+  posts       PostCategory[]
+}
+
+model PostCategory {
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([postId, categoryId]) 
 }
