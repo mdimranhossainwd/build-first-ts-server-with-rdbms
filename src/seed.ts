@@ -242,12 +242,26 @@ export const getAllCategory = async (req: Request, res: Response) => {
   }
 };
 
+// Get all users data functions
+
 export const getAllUser = async (req: Request, res: Response) => {
   try {
     const result = await client.user.findMany();
     res.status(200).json(result);
   } catch (error) {
     console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Failed to fetch data" });
+  }
+};
+
+// Get all postcategories data functions
+
+export const getAllPostcategories = async (req: Request, res: Response) => {
+  try {
+    const result = await client.postCategory.findMany();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("Error Post Category Fetching Data", error);
     return res.status(500).json({ error: "Failed to fetch data" });
   }
 };
