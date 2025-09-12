@@ -40,7 +40,32 @@ export const createPost = async (req: Request, res: Response) => {
     });
     return res.status(201).json(postData);
   } catch (error) {
-    console.error("Error creating post:", error); // <-- show actual error
+    console.error("Error creating post:", error);
+    return res.status(500).json({ error: "Failed to create post" });
+  }
+};
+
+// Get all posts functions
+
+export const getAllPosts = async (req: Request, res: Response) => {
+  try {
+    const data = await client.post.findMany({
+      include: {
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error Fetching Get", error);
     return res.status(500).json({ error: "Failed to create post" });
   }
 };
