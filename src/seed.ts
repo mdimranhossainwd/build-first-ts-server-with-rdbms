@@ -149,3 +149,36 @@ export const getUserComment = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to create post" });
   }
 };
+
+// Create Category function
+export const createCategory = async (req: Request, res: Response) => {
+  try {
+    const { name, description } = req.body;
+
+    // Validation
+    if (!name) {
+      return res.status(400).json({ error: "Category name is required" });
+    }
+
+    const category = await client.category.create({
+      data: {
+        name,
+        description: description || null,
+      },
+    });
+
+    return res.status(201).json({
+      message: "Category created successfully",
+      category,
+    });
+  } catch (error: any) {
+    console.error("Error creating category:", error);
+
+    if (error.code === "P2002") {
+      // Prisma unique constraint error
+      return res.status(400).json({ error: "Category name already exists" });
+    }
+
+    return res.status(500).json({ error: "Failed to create category" });
+  }
+};

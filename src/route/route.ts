@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createCategory,
   createComment,
   createPost,
   getAllPosts,
@@ -13,4 +14,5 @@ router.post("/posts", createPost);
 router.get("/all-posts", getAllPosts);
 router.post("/create-comments", createComment);
 router.get("/get-own-comments", getUserComment);
+router.post("/create-category", createCategory);
 export default router;
