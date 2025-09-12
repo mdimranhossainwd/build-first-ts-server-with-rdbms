@@ -241,3 +241,13 @@ export const getAllCategory = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to fetch data" });
   }
 };
+
+export const getAllUser = async (req: Request, res: Response) => {
+  try {
+    const result = await client.user.findMany();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Failed to fetch data" });
+  }
+};

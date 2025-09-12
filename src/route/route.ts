@@ -6,6 +6,7 @@ import {
   createPost,
   getAllCategory,
   getAllPosts,
+  getAllUser,
   getUserByEmail,
   getUserComment,
 } from "../seed";
@@ -18,5 +19,10 @@ router.post("/create-comments", createComment);
 router.get("/get-own-comments", getUserComment);
 router.post("/create-category", createCategory);
 router.post("/post-category", assignCategoryToPost);
+
+// ALL GET ENDPOINTS
+
 router.get("/all-category", getAllCategory);
+router.get("/all-users-data", getAllUser);
+
 export default router;
