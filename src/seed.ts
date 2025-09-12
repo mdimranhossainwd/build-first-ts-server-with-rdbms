@@ -69,3 +69,44 @@ export const getAllPosts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to create post" });
   }
 };
+
+// Create Comments Data function
+export const createComment = async (req: Request, res: Response) => {
+  try {
+    const { content, postId, authorId } = req.body;
+
+    // Basic validation
+    if (!content || !postId || !authorId) {
+      return res
+        .status(400)
+        .json({ error: "content, postId, and authorId are required" });
+    }
+
+    const comment = await client.comments.create({
+      data: {
+        content,
+        postId: Number(postId),
+        authorId: Number(authorId),
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        },
+        post: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
+    });
+    return res.status(201).json(comment);
+  } catch (error) {
+    console.log("Error Posting for Comments", error);
+    res.status(500).json("Server Invaild");
+  }
+};
