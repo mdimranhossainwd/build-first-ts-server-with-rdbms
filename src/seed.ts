@@ -182,3 +182,44 @@ export const createCategory = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to create category" });
   }
 };
+
+// Assign category to a post
+export const assignCategoryToPost = async (req: Request, res: Response) => {
+  try {
+    const { postId, categoryId } = req.body;
+
+    // Validation
+    if (!postId || !categoryId) {
+      return res
+        .status(400)
+        .json({ error: "postId and categoryId are required" });
+    }
+
+    const postCategory = await client.postCategory.create({
+      data: {
+        postId: Number(postId),
+        categoryId: Number(categoryId),
+      },
+      include: {
+        post: { select: { id: true, title: true } },
+        category: { select: { id: true, name: true } },
+      },
+    });
+
+    return res.status(201).json({
+      message: "Category assigned to post successfully",
+      postCategory,
+    });
+  } catch (error: any) {
+    console.error("Error assigning category:", error);
+
+    if (error.code === "P2002") {
+      // Prisma unique constraint violation (duplicate postId + categoryId)
+      return res
+        .status(400)
+        .json({ error: "This post already has this category" });
+    }
+
+    return res.status(500).json({ error: "Failed to assign category to post" });
+  }
+};
