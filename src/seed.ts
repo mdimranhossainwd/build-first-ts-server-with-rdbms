@@ -343,3 +343,27 @@ export const deleteComment = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Something is wrong" });
   }
 };
+
+// Delete Comments By ID
+
+export const deleteCategory = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const result = await client.category.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    return res.status(200).json({
+      message: "Category deleted successfully",
+      result,
+    });
+  } catch (error) {
+    console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Something is wrong" });
+  }
+};
