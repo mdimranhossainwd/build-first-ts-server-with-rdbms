@@ -265,3 +265,31 @@ export const getAllPostcategories = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to fetch data" });
   }
 };
+
+// // ===============================
+
+// DELETE ALL ENDPOINTS FUNCTION
+
+// // ===============================
+
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const result = await client.user.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    return res.status(200).json({
+      message: "User deleted successfully",
+      result,
+    });
+  } catch (error) {
+    console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Something is wrong" });
+  }
+};
