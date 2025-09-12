@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { getUserByEmail } from "../seed";
+import { createPost, getUserByEmail } from "../seed";
 const router = Router();
 
 router.get("/all-users", getUserByEmail);
+router.post("/posts", createPost);
 export default router;
