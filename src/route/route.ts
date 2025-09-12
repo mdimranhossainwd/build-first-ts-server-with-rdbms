@@ -4,6 +4,7 @@ import {
   createCategory,
   createComment,
   createPost,
+  deletePost,
   deleteUser,
   getAllCategory,
   getAllPostcategories,
@@ -30,5 +31,6 @@ router.get("/all-postcategory", getAllPostcategories);
 
 // ALL DELETE ENDPOINTS
 router.delete("/delete-user/:id", deleteUser);
+router.delete("/delete-post/:id", deletePost);
 
 export default router;
