@@ -4,6 +4,7 @@ import {
   createCategory,
   createComment,
   createPost,
+  getAllCategory,
   getAllPosts,
   getUserByEmail,
   getUserComment,
@@ -17,4 +18,5 @@ router.post("/create-comments", createComment);
 router.get("/get-own-comments", getUserComment);
 router.post("/create-category", createCategory);
 router.post("/post-category", assignCategoryToPost);
+router.get("/all-category", getAllCategory);
 export default router;

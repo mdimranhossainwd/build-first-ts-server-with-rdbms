@@ -223,3 +223,21 @@ export const assignCategoryToPost = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Failed to assign category to post" });
   }
 };
+
+// // ===============================
+
+// GET ALL ENDPOINTS FUNCTION
+
+// // ===============================
+
+// Get all category function
+
+export const getAllCategory = async (req: Request, res: Response) => {
+  try {
+    const result = await client.category.findMany();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("Error Fetching Category Data", error);
+    return res.status(500).json({ error: "Failed to fetch data" });
+  }
+};

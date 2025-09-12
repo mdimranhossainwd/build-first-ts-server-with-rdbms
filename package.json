@@ -20,5 +20,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.19"
-  }
+  },
+  "repository": "https://github.com/mdimranhossainwd/build-first-ts-server-with-rdbms.git",
+  "author": "mdimranhossainwd <mdimranhossain7498@gmail.com>"
 }
