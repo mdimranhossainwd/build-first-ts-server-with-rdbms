@@ -7,6 +7,7 @@ import {
   deleteCategory,
   deleteComment,
   deletePost,
+  deletePostCategory,
   deleteUser,
   getAllCategory,
   getAllPostcategories,
@@ -36,4 +37,6 @@ router.delete("/delete-user/:id", deleteUser);
 router.delete("/delete-post/:id", deletePost);
 router.delete("/delete-comments/:id", deleteComment);
 router.delete("/delete-category/:id", deleteCategory);
+router.delete("/post-category/:postId/:categoryId", deletePostCategory);
+
 export default router;

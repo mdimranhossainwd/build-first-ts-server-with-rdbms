@@ -344,7 +344,7 @@ export const deleteComment = async (req: Request, res: Response) => {
   }
 };
 
-// Delete Comments By ID
+// Delete Category By ID
 
 export const deleteCategory = async (req: Request, res: Response) => {
   try {
@@ -365,5 +365,36 @@ export const deleteCategory = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("Error Fetching User Data", error);
     return res.status(500).json({ error: "Something is wrong" });
+  }
+};
+
+// Delete Comments By ID
+
+export const deletePostCategory = async (req: Request, res: Response) => {
+  try {
+    const { postId, categoryId } = req.params;
+
+    if (!postId || !categoryId) {
+      return res
+        .status(400)
+        .json({ error: "postId and categoryId are required" });
+    }
+
+    const result = await client.postCategory.delete({
+      where: {
+        postId_categoryId: {
+          postId: Number(postId),
+          categoryId: Number(categoryId),
+        },
+      },
+    });
+
+    return res.status(200).json({
+      message: "PostCategory deleted successfully",
+      result,
+    });
+  } catch (error) {
+    console.error("Error deleting post category", error);
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };
