@@ -467,3 +467,33 @@ export const updateComment = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Something is wrong" });
   }
 };
+
+// Update Post by his ID
+
+export const updatePost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { title, content, published } = req.body || {};
+    if (!id) {
+      return res.status(400).json({ error: "Comment ID is required" });
+    }
+
+    const result = await client.post.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        title,
+        content,
+        published,
+      },
+    });
+    return res.status(200).json({
+      message: "Post Info Update successfully",
+      result,
+    });
+  } catch (error) {
+    console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Something is wrong" });
+  }
+};
