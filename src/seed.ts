@@ -1,19 +1,11 @@
 import { Request, Response } from "express";
 import { client } from "./prisma";
 
-export const getUserByEmail = async (req: Request, res: Response) => {
-  try {
-    const user = await client.user.findMany({
-      select: {
-        email: true,
-        name: true,
-      },
-    });
-    return res.status(200).json(user);
-  } catch (error) {
-    throw new Error("Invalid Useremail");
-  }
-};
+// // ===============================
+
+// POST ALL ENDPOINTS FUNCTION
+
+// // ===============================
 
 // Create Post Data functions
 
@@ -41,31 +33,6 @@ export const createPost = async (req: Request, res: Response) => {
     return res.status(201).json(postData);
   } catch (error) {
     console.error("Error creating post:", error);
-    return res.status(500).json({ error: "Failed to create post" });
-  }
-};
-
-// Get all posts functions
-
-export const getAllPosts = async (req: Request, res: Response) => {
-  try {
-    const data = await client.post.findMany({
-      include: {
-        author: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-    });
-    return res.status(200).json(data);
-  } catch (error) {
-    console.log("Error Fetching Get", error);
     return res.status(500).json({ error: "Failed to create post" });
   }
 };
@@ -108,45 +75,6 @@ export const createComment = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("Error Posting for Comments", error);
     res.status(500).json("Server Invaild");
-  }
-};
-
-// Get by commnts only user for his own comments find by email
-
-export const getUserComment = async (req: Request, res: Response) => {
-  try {
-    const email = req.query.email as string;
-    if (!email) {
-      return res
-        .status(400)
-        .json({ error: "Email query parameter is required" });
-    }
-
-    const comments = await client.comments.findMany({
-      where: {
-        author: {
-          email: {
-            equals: email, // case-insensitive match
-          },
-        },
-      },
-      include: {
-        author: { select: { id: true, email: true, name: true } },
-        post: { select: { id: true, title: true } },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-
-    if (comments.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No comments found for this user" });
-    }
-
-    return res.status(200).json(comments);
-  } catch (error) {
-    console.log("Error Fetching Get", error);
-    return res.status(500).json({ error: "Failed to create post" });
   }
 };
 
@@ -229,6 +157,85 @@ export const assignCategoryToPost = async (req: Request, res: Response) => {
 // GET ALL ENDPOINTS FUNCTION
 
 // // ===============================
+
+// Get all posts functions
+
+export const getAllPosts = async (req: Request, res: Response) => {
+  try {
+    const data = await client.post.findMany({
+      include: {
+        author: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error Fetching Get", error);
+    return res.status(500).json({ error: "Failed to create post" });
+  }
+};
+
+// Get by commnts only user for his own comments find by email
+
+export const getUserComment = async (req: Request, res: Response) => {
+  try {
+    const email = req.query.email as string;
+    if (!email) {
+      return res
+        .status(400)
+        .json({ error: "Email query parameter is required" });
+    }
+
+    const comments = await client.comments.findMany({
+      where: {
+        author: {
+          email: {
+            equals: email, // case-insensitive match
+          },
+        },
+      },
+      include: {
+        author: { select: { id: true, email: true, name: true } },
+        post: { select: { id: true, title: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (comments.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No comments found for this user" });
+    }
+
+    return res.status(200).json(comments);
+  } catch (error) {
+    console.log("Error Fetching Get", error);
+    return res.status(500).json({ error: "Failed to create post" });
+  }
+};
+
+// Get user by email
+export const getUserByEmail = async (req: Request, res: Response) => {
+  try {
+    const user = await client.user.findMany({
+      select: {
+        email: true,
+        name: true,
+      },
+    });
+    return res.status(200).json(user);
+  } catch (error) {
+    throw new Error("Invalid Useremail");
+  }
+};
 
 // Get all category function
 
@@ -396,5 +403,38 @@ export const deletePostCategory = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error deleting post category", error);
     return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+// // ===============================
+
+// UPDATE ALL ENDPOINTS FUNCTION
+
+// // ===============================
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name, email } = req.body;
+    if (!id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const result = await client.user.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+        email,
+      },
+    });
+    return res.status(200).json({
+      message: "User Info Update successfully",
+      result,
+    });
+  } catch (error) {
+    console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Something is wrong" });
   }
 };
