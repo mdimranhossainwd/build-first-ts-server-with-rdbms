@@ -15,6 +15,7 @@ import {
   getAllUser,
   getUserByEmail,
   getUserComment,
+  updateComment,
   updateUser,
 } from "../seed";
 const router = Router();
@@ -43,5 +44,6 @@ router.delete("/post-category/:postId/:categoryId", deletePostCategory);
 
 // ALL UPDATE ENDPOINTS
 router.put("/update-user-info/:id", updateUser);
+router.put("/update-comments/:id", updateComment);
 
 export default router;

@@ -412,6 +412,8 @@ export const deletePostCategory = async (req: Request, res: Response) => {
 
 // // ===============================
 
+// Update user info by his ID
+
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -431,6 +433,33 @@ export const updateUser = async (req: Request, res: Response) => {
     });
     return res.status(200).json({
       message: "User Info Update successfully",
+      result,
+    });
+  } catch (error) {
+    console.log("Error Fetching User Data", error);
+    return res.status(500).json({ error: "Something is wrong" });
+  }
+};
+
+// Update comment info by his ID
+export const updateComment = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+    if (!id) {
+      return res.status(400).json({ error: "Comment ID is required" });
+    }
+
+    const result = await client.comments.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        content,
+      },
+    });
+    return res.status(200).json({
+      message: "Comment Info Update successfully",
       result,
     });
   } catch (error) {
